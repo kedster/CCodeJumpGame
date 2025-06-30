@@ -1,4 +1,4 @@
-// Settings management without localStorage
+// Settings management without localStorage (consistent with game.js)
 let gameSettings = {
     difficulty: 'normal',
     hints: true,
@@ -8,15 +8,20 @@ let gameSettings = {
     fontSize: 'medium'
 };
 
-// Navigation function
+// Make settings globally accessible
+window.gameSettings = gameSettings;
+
+// Navigation function - fixed path
 function goBack() {
-    window.location.href = "../menu.html";
+    // Navigate to menu.html in the same directory or adjust path as needed
+    window.location.href = "menu.html"; // Changed from "../menu.html"
 }
 
 // Settings functions
 function changeDifficulty() {
     const difficulty = document.getElementById('difficulty').value;
     gameSettings.difficulty = difficulty;
+    window.gameSettings = gameSettings; // Update global reference
     updateSettingsDisplay();
     
     // Visual feedback
@@ -26,6 +31,7 @@ function changeDifficulty() {
 function toggleHints() {
     const hints = document.getElementById('hints').checked;
     gameSettings.hints = hints;
+    window.gameSettings = gameSettings;
     updateSettingsDisplay();
     
     showSettingChanged('Hints ' + (hints ? 'enabled' : 'disabled'));
@@ -34,6 +40,7 @@ function toggleHints() {
 function toggleSound() {
     const sound = document.getElementById('sound').checked;
     gameSettings.sound = sound;
+    window.gameSettings = gameSettings;
     updateSettingsDisplay();
     
     showSettingChanged('Sound effects ' + (sound ? 'enabled' : 'disabled'));
@@ -42,6 +49,7 @@ function toggleSound() {
 function toggleCodeHighlight() {
     const codeHighlight = document.getElementById('codeHighlight').checked;
     gameSettings.codeHighlight = codeHighlight;
+    window.gameSettings = gameSettings;
     updateSettingsDisplay();
     
     showSettingChanged('Code highlighting ' + (codeHighlight ? 'enabled' : 'disabled'));
@@ -50,6 +58,7 @@ function toggleCodeHighlight() {
 function changeTheme() {
     const theme = document.getElementById('theme').value;
     gameSettings.theme = theme;
+    window.gameSettings = gameSettings;
     updateSettingsDisplay();
     applyTheme(theme);
     
@@ -59,6 +68,7 @@ function changeTheme() {
 function changeFontSize() {
     const fontSize = document.getElementById('fontSize').value;
     gameSettings.fontSize = fontSize;
+    window.gameSettings = gameSettings;
     updateSettingsDisplay();
     applyFontSize(fontSize);
     
@@ -68,9 +78,9 @@ function changeFontSize() {
 // Data management functions
 function resetHighScores() {
     if (confirm('Are you sure you want to reset all high scores? This cannot be undone.')) {
-        // Reset high scores in memory
-        if (window.gameHighScores) {
-            window.gameHighScores = [];
+        // Reset high scores in memory - use the same variable name as game.js
+        if (window.highScores) {
+            window.highScores.length = 0; // Clear the array
         }
         showSettingChanged('High scores reset successfully');
     }
@@ -166,25 +176,36 @@ function showSettingChanged(message) {
     }, 1800);
 }
 
-// Update settings display (stub for UI sync)
+// Update settings display
 function updateSettingsDisplay() {
-    // If you have UI elements reflecting settings, update them here.
-    // For now, this is a placeholder.
-}
-
-// Initialize theme and font size on load
-document.addEventListener('DOMContentLoaded', function() {
-    const savedSettings = JSON.parse(localStorage.getItem('gameSettings'));
-    if (savedSettings) {
-        gameSettings = savedSettings;
+    // Update UI elements to reflect current settings
+    if (document.getElementById('difficulty')) {
         document.getElementById('difficulty').value = gameSettings.difficulty;
+    }
+    if (document.getElementById('hints')) {
         document.getElementById('hints').checked = gameSettings.hints;
+    }
+    if (document.getElementById('sound')) {
         document.getElementById('sound').checked = gameSettings.sound;
+    }
+    if (document.getElementById('codeHighlight')) {
         document.getElementById('codeHighlight').checked = gameSettings.codeHighlight;
+    }
+    if (document.getElementById('theme')) {
         document.getElementById('theme').value = gameSettings.theme;
+    }
+    if (document.getElementById('fontSize')) {
         document.getElementById('fontSize').value = gameSettings.fontSize;
     }
+}
+
+// Initialize settings on load (removed localStorage dependency)
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize settings display
     updateSettingsDisplay();
     applyTheme(gameSettings.theme);
     applyFontSize(gameSettings.fontSize);
+    
+    // Make settings globally available
+    window.gameSettings = gameSettings;
 });

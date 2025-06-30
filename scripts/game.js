@@ -1,4 +1,4 @@
-        let gameState = {
+let gameState = {
             score: 0,
             level: 1,
             isGameOver: false,
@@ -8,8 +8,21 @@
             canSpawn: true
         };
 
-        // High scores management
+        // High scores management - make globally accessible
         let highScores = [];
+        window.highScores = highScores;
+        
+        // Get settings from global variable or use defaults
+        function getSettings() {
+            return window.gameSettings || {
+                difficulty: 'normal',
+                hints: true,
+                sound: true,
+                codeHighlight: true,
+                theme: 'dark',
+                fontSize: 'medium'
+            };
+        }
         
         function loadHighScores() {
             // Since we can't use localStorage, we'll keep scores in memory for the session
@@ -22,6 +35,7 @@
                     { initials: 'NEW', score: 80, level: 2 },
                     { initials: 'BIE', score: 50, level: 1 }
                 ];
+                window.highScores = highScores; // Keep global reference
             }
             updateHighScoresDisplay();
         }
@@ -39,6 +53,7 @@
             
             // Keep only top 10
             highScores = highScores.slice(0, 10);
+            window.highScores = highScores; // Update global reference
             
             updateHighScoresDisplay();
             restartGame();
@@ -116,13 +131,33 @@
         let gameLoop;
 
         function initGame() {
+            const settings = getSettings();
+            
+            // Apply difficulty settings
+            let baseSpeed = 8;
+            let baseSpawnRate = 0.003;
+            
+            switch(settings.difficulty) {
+                case 'easy':
+                    baseSpeed = 10; // Slower obstacles
+                    baseSpawnRate = 0.002; // Less frequent spawning
+                    break;
+                case 'hard':
+                    baseSpeed = 6; // Faster obstacles
+                    baseSpawnRate = 0.004; // More frequent spawning
+                    break;
+                default: // normal
+                    baseSpeed = 8;
+                    baseSpawnRate = 0.003;
+            }
+            
             gameState = {
                 score: 0,
                 level: 1,
                 isGameOver: false,
                 isJumping: false,
-                obstacleSpeed: 8,
-                spawnRate: 0.003,
+                obstacleSpeed: baseSpeed,
+                spawnRate: baseSpawnRate,
                 canSpawn: true
             };
             
@@ -144,7 +179,13 @@
         }
 
         function updateHint() {
-            hintElement.textContent = hints[gameState.level] || hints[10];
+            const settings = getSettings();
+            if (settings.hints) {
+                hintElement.textContent = hints[gameState.level] || hints[10];
+                hintElement.style.display = 'block';
+            } else {
+                hintElement.style.display = 'none';
+            }
         }
 
         function showLevelUp() {
@@ -168,12 +209,42 @@
             gameState.isJumping = true;
             player.classList.add('jumping');
             
+            // Play sound effect if enabled
+            const settings = getSettings();
+            if (settings.sound) {
+                playJumpSound();
+            }
+            
             setTimeout(() => {
                 player.classList.remove('jumping');
                 setTimeout(() => {
                     gameState.isJumping = false;
                 }, 100); // Small delay to prevent double jumps
             }, 800); // Increased jump duration for better obstacle clearance
+        }
+
+        function playJumpSound() {
+            // Simple sound effect using Web Audio API
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                // Fallback if Web Audio API isn't supported
+                console.log('Jump sound effect would play here');
+            }
         }
 
         function isValidCommand(command) {
@@ -198,19 +269,23 @@
                 });
                 gameState.canSpawn = false;
                 
-                // Show hint immediately when obstacle spawns
-                hintElement.classList.remove('hidden', 'danger');
-                hintElement.style.opacity = '1';
+                const settings = getSettings();
                 
-                // Hide hint when obstacle gets close (70% of the way)
-                setTimeout(() => {
-                    hintElement.classList.add('danger');
-                }, gameState.obstacleSpeed * 700); // 70% of duration
-                
-                // Completely hide hint when very close (85% of the way)
-                setTimeout(() => {
-                    hintElement.classList.add('hidden');
-                }, gameState.obstacleSpeed * 850); // 85% of duration
+                // Show hint immediately when obstacle spawns (if hints are enabled)
+                if (settings.hints) {
+                    hintElement.classList.remove('hidden', 'danger');
+                    hintElement.style.opacity = '1';
+                    
+                    // Hide hint when obstacle gets close (70% of the way)
+                    setTimeout(() => {
+                        hintElement.classList.add('danger');
+                    }, gameState.obstacleSpeed * 700); // 70% of duration
+                    
+                    // Completely hide hint when very close (85% of the way)
+                    setTimeout(() => {
+                        hintElement.classList.add('hidden');
+                    }, gameState.obstacleSpeed * 850); // 85% of duration
+                }
                 
                 // Remove obstacle after animation and allow next spawn
                 setTimeout(() => {
@@ -220,9 +295,11 @@
                         gameState.score += 10;
                         updateUI();
                         
-                        // Reset hint visibility
-                        hintElement.classList.remove('hidden', 'danger');
-                        hintElement.style.opacity = '1';
+                        // Reset hint visibility (if hints are enabled)
+                        if (settings.hints) {
+                            hintElement.classList.remove('hidden', 'danger');
+                            hintElement.style.opacity = '1';
+                        }
                         
                         // Wait a bit before allowing next obstacle
                         setTimeout(() => {
@@ -294,11 +371,20 @@
         commandInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && !gameState.isJumping) {
                 const command = this.value.trim();
+                const settings = getSettings();
                 
                 if (isValidCommand(command)) {
                     jump();
                     showFeedback(true);
                     this.value = '';
+                    
+                    // Apply code highlighting if enabled
+                    if (settings.codeHighlight) {
+                        this.style.backgroundColor = '#4CAF50';
+                        setTimeout(() => {
+                            this.style.backgroundColor = '';
+                        }, 200);
+                    }
                 } else {
                     showFeedback(false);
                     this.style.borderColor = '#f44336';
