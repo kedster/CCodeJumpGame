@@ -1,190 +1,160 @@
-// Settings management without localStorage
-let gameSettings = {
-    difficulty: 'normal',
-    hints: true,
-    sound: true,
-    codeHighlight: true,
-    theme: 'dark',
-    fontSize: 'medium'
-};
-
-// Navigation function
-function goBack() {
-    window.location.href = "../menu.html";
+/* Root variables for easy theming */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #222;
+    --background-color: #f5f5f5;
+    --card-background: #fff;
+    --accent-color: #2196F3;
+    --danger-color: #e53935;
+    --text-color: #222;
+    --font-size: 16px;
+    --border-radius: 10px;
+    --transition: 0.2s all;
 }
 
-// Settings functions
-function changeDifficulty() {
-    const difficulty = document.getElementById('difficulty').value;
-    gameSettings.difficulty = difficulty;
-    updateSettingsDisplay();
-    
-    // Visual feedback
-    showSettingChanged('Difficulty changed to ' + difficulty);
+/* General body styles */
+body {
+    background: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: var(--font-size);
+    margin: 0;
+    padding: 0;
 }
 
-function toggleHints() {
-    const hints = document.getElementById('hints').checked;
-    gameSettings.hints = hints;
-    updateSettingsDisplay();
-    
-    showSettingChanged('Hints ' + (hints ? 'enabled' : 'disabled'));
+/* Container for settings */
+.settings-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 32px 24px;
 }
 
-function toggleSound() {
-    const sound = document.getElementById('sound').checked;
-    gameSettings.sound = sound;
-    updateSettingsDisplay();
-    
-    showSettingChanged('Sound effects ' + (sound ? 'enabled' : 'disabled'));
+/* Header */
+.settings-header {
+    text-align: center;
+    margin-bottom: 32px;
 }
 
-function toggleCodeHighlight() {
-    const codeHighlight = document.getElementById('codeHighlight').checked;
-    gameSettings.codeHighlight = codeHighlight;
-    updateSettingsDisplay();
-    
-    showSettingChanged('Code highlighting ' + (codeHighlight ? 'enabled' : 'disabled'));
+.settings-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 8px;
 }
 
-function changeTheme() {
-    const theme = document.getElementById('theme').value;
-    gameSettings.theme = theme;
-    updateSettingsDisplay();
-    applyTheme(theme);
-    
-    showSettingChanged('Theme changed to ' + theme);
+.settings-subtitle {
+    font-size: 1rem;
+    color: #666;
 }
 
-function changeFontSize() {
-    const fontSize = document.getElementById('fontSize').value;
-    gameSettings.fontSize = fontSize;
-    updateSettingsDisplay();
-    applyFontSize(fontSize);
-    
-    showSettingChanged('Font size changed to ' + fontSize);
+/* Setting group */
+.setting-group {
+    margin-bottom: 28px;
 }
 
-// Data management functions
-function resetHighScores() {
-    if (confirm('Are you sure you want to reset all high scores? This cannot be undone.')) {
-        // Reset high scores in memory
-        if (window.gameHighScores) {
-            window.gameHighScores = [];
-        }
-        showSettingChanged('High scores reset successfully');
+.setting-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+}
+
+.setting-options {
+    display: flex;
+    gap: 16px;
+}
+
+.setting-option {
+    background: #f0f0f0;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+.setting-option.selected,
+.setting-option:focus {
+    border-color: var(--primary-color);
+    background: #e8f5e9;
+    color: var(--primary-color);
+    outline: none;
+}
+
+.setting-option:hover {
+    background: #e3f2fd;
+    color: var(--accent-color);
+}
+
+/* Save/Reset buttons */
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.settings-btn {
+    padding: 10px 28px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.settings-btn.save {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.settings-btn.save:hover {
+    background: #388e3c;
+}
+
+.settings-btn.reset {
+    background: var(--danger-color);
+    color: #fff;
+}
+
+.settings-btn.reset:hover {
+    background: #b71c1c;
+}
+
+/* Feedback message */
+#settingChangedFeedback {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-color);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .settings-container {
+        padding: 18px 6px;
+    }
+    .settings-title {
+        font-size: 1.3rem;
+    }
+    .settings-btn {
+        padding: 8px 14px;
+        font-size: 0.95rem;
     }
 }
-
-function resetProgress() {
-    if (confirm('Are you sure you want to reset all progress? This will reset all unlocked levels.')) {
-        // Reset progress in memory
-        if (window.gameProgress) {
-            window.gameProgress = { completedLevels: 0, maxLevel: 1 };
-        }
-        showSettingChanged('Progress reset successfully');
-    }
-}
-
-function exportSettings() {
-    const settingsData = JSON.stringify(gameSettings, null, 2);
-    const blob = new Blob([settingsData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'csharp-code-jump-settings.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showSettingChanged('Settings exported successfully');
-}
-
-// Apply theme changes
-function applyTheme(theme) {
-    document.body.className = theme + '-theme';
-    
-    const root = document.documentElement;
-    switch(theme) {
-        case 'light':
-            root.style.setProperty('--bg-color', '#ffffff');
-            root.style.setProperty('--text-color', '#333333');
-            root.style.setProperty('--accent-color', '#2196F3');
-            break;
-        case 'matrix':
-            root.style.setProperty('--bg-color', '#000000');
-            root.style.setProperty('--text-color', '#00ff00');
-            root.style.setProperty('--accent-color', '#00ff88');
-            break;
-        default: // dark
-            root.style.setProperty('--bg-color', '#1a1a1a');
-            root.style.setProperty('--text-color', '#ffffff');
-            root.style.setProperty('--accent-color', '#4CAF50');
-    }
-}
-
-// Apply font size changes
-function applyFontSize(fontSize) {
-    const root = document.documentElement;
-    switch(fontSize) {
-        case 'small':
-            root.style.setProperty('--font-size', '14px');
-            break;
-        case 'large':
-            root.style.setProperty('--font-size', '20px');
-            break;
-        default: // medium
-            root.style.setProperty('--font-size', '16px');
-    }
-}
-
-// Utility: Show setting changed feedback
-function showSettingChanged(message) {
-    let feedback = document.getElementById('settingChangedFeedback');
-    if (!feedback) {
-        feedback = document.createElement('div');
-        feedback.id = 'settingChangedFeedback';
-        feedback.style.position = 'fixed';
-        feedback.style.bottom = '24px';
-        feedback.style.left = '50%';
-        feedback.style.transform = 'translateX(-50%)';
-        feedback.style.background = 'var(--accent-color, #4CAF50)';
-        feedback.style.color = 'var(--text-color, #fff)';
-        feedback.style.padding = '12px 24px';
-        feedback.style.borderRadius = '8px';
-        feedback.style.fontSize = '1rem';
-        feedback.style.zIndex = '9999';
-        feedback.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
-        document.body.appendChild(feedback);
-    }
-    feedback.textContent = message;
-    feedback.style.opacity = '1';
-    setTimeout(() => {
-        feedback.style.opacity = '0';
-    }, 1800);
-}
-
-// Update settings display (stub for UI sync)
-function updateSettingsDisplay() {
-    // If you have UI elements reflecting settings, update them here.
-    // For now, this is a placeholder.
-}
-
-// Initialize theme and font size on load
-document.addEventListener('DOMContentLoaded', function() {
-    const savedSettings = JSON.parse(localStorage.getItem('gameSettings'));
-    if (savedSettings) {
-        gameSettings = savedSettings;
-        document.getElementById('difficulty').value = gameSettings.difficulty;
-        document.getElementById('hints').checked = gameSettings.hints;
-        document.getElementById('sound').checked = gameSettings.sound;
-        document.getElementById('codeHighlight').checked = gameSettings.codeHighlight;
-        document.getElementById('theme').value = gameSettings.theme;
-        document.getElementById('fontSize').value = gameSettings.fontSize;
-    }
-    updateSettingsDisplay();
-    applyTheme(gameSettings.theme);
-    applyFontSize(gameSettings.fontSize);
-});
