@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - C# Code Jump</title>
+    <link rel="stylesheet" href="../styles/settings.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">⚙️ SETTINGS</h1>
+            <p class="subtitle">Customize Your Gaming Experience</p>
+            <button class="back-btn" onclick="goBack()">← Back to Menu</button>
+        </div>
+
+        <div class="settings-section">
+            <h3>Game Settings</h3>
+            
+            <div class="setting-item">
+                <label for="difficulty">Difficulty Level:</label>
+                <select id="difficulty" onchange="changeDifficulty()">
+                    <option value="easy">Easy (Slower obstacles)</option>
+                    <option value="normal" selected>Normal (Default speed)</option>
+                    <option value="hard">Hard (Faster obstacles)</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <label for="hints">Show Hints:</label>
+                <input type="checkbox" id="hints" checked onchange="toggleHints()">
+                <span class="checkbox-label">Display command hints during gameplay</span>
+            </div>
+
+            <div class="setting-item">
+                <label for="sound">Sound Effects:</label>
+                <input type="checkbox" id="sound" checked onchange="toggleSound()">
+                <span class="checkbox-label">Enable sound effects (Visual feedback)</span>
+            </div>
+
+            <div class="setting-item">
+                <label for="codeHighlight">Code Highlighting:</label>
+                <input type="checkbox" id="codeHighlight" checked onchange="toggleCodeHighlight()">
+                <span class="checkbox-label">Highlight valid C# syntax in commands</span>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Display Settings</h3>
+            
+            <div class="setting-item">
+                <label for="theme">Theme:</label>
+                <select id="theme" onchange="changeTheme()">
+                    <option value="dark" selected>Dark Theme</option>
+                    <option value="light">Light Theme</option>
+                    <option value="matrix">Matrix Theme</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <label for="fontSize">Font Size:</label>
+                <select id="fontSize" onchange="changeFontSize()">
+                    <option value="small">Small</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="large">Large</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Data Management</h3>
+            
+            <div class="setting-item">
+                <button class="action-btn" onclick="resetHighScores()">Reset High Scores</button>
+                <span class="action-description">Clear all saved high scores</span>
+            </div>
+
+            <div class="setting-item">
+                <button class="action-btn" onclick="resetProgress()">Reset Progress</button>
+                <span class="action-description">Clear all level progress</span>
+            </div>
+
+            <div class="setting-item">
+                <button class="action-btn" onclick="exportSettings()">Export Settings</button>
+                <span class="action-description">Download your settings as a file</span>
+            </div>
+        </div>
+
+        <div class="current-settings" id="currentSettings">
+            <h3>Current Settings</h3>
+            <div id="settingsDisplay"></div>
+        </div>
+    </div>
+    
+    <script src="../scripts/settings.js"></script>
+</body>
+</html>
