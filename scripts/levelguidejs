@@ -1,0 +1,30 @@
+// Navigates back to the main menu
+function goBack() {
+    window.location.href = "menu.html";
+}
+
+// Updates the progress bar and text
+function updateProgress() {
+    const totalLevels = document.querySelectorAll('.level-card').length;
+    // Get completed levels from localStorage or default to 0
+    let completed = parseInt(localStorage.getItem('completedLevels')) || 0;
+    if (completed > totalLevels) completed = totalLevels;
+
+    const percent = Math.round((completed / totalLevels) * 100);
+    document.getElementById('progressFill').style.width = percent + '%';
+
+    let text = '';
+    if (completed === 0) {
+        text = 'Complete levels to unlock advanced C# concepts!';
+    } else if (completed < totalLevels) {
+        text = `You have completed ${completed} of ${totalLevels} levels. Keep going!`;
+    } else {
+        text = 'Congratulations! You have mastered all C# concepts!';
+    }
+    document.getElementById('progressText').textContent = text;
+}
+
+// For demo: Uncomment to simulate level completion
+// localStorage.setItem('completedLevels', 3);
+
+document.addEventListener('DOMContentLoaded', updateProgress);

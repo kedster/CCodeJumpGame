@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Guide - C# Code Jump</title>
+    <link rel="stylesheet" href="styles/levelguide.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">📚 LEVEL GUIDE</h1>
+            <p class="subtitle">Master C# Programming Step by Step</p>
+            <button class="back-btn" onclick="goBack()">← Back to Menu</button>
+        </div>
+
+        <div class="progress-section">
+            <h3 class="progress-title">Your Learning Journey</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Complete levels to unlock advanced C# concepts!</p>
+        </div>
+
+        <div class="levels-grid">
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">1</div>
+                    <div class="level-title">Method Calls</div>
+                </div>
+                <div class="level-description">
+                    Learn the basics of calling methods in C#. This is your first step into programming!
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">Jump()</div>
+                    <div class="code-example">player.Jump()</div>
+                    <div class="code-example">character.Jump()</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">2</div>
+                    <div class="level-title">Semicolons</div>
+                </div>
+                <div class="level-description">
+                    Every statement in C# must end with a semicolon. Time to make it a habit!
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">Jump();</div>
+                    <div class="code-example">player.Jump();</div>
+                    <div class="code-example">character.Jump();</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">3</div>
+                    <div class="level-title">Conditional Statements</div>
+                </div>
+                <div class="level-description">
+                    Make decisions in your code using if statements. Logic is the heart of programming!
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">if(true) Jump();</div>
+                    <div class="code-example">if(obstacle) Jump();</div>
+                    <div class="code-example">if(canJump) Jump();</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">4</div>
+                    <div class="level-title">Variable Declarations</div>
+                </div>
+                <div class="level-description">
+                    Store data in variables with different types. Understanding data types is crucial!
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">int x = 5; Jump();</div>
+                    <div class="code-example">bool canJump = true; Jump();</div>
+                    <div class="code-example">string name = "hero"; Jump();</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">5</div>
+                    <div class="level-title">Loops</div>
+                </div>
+                <div class="level-description">
+                    Repeat actions efficiently with for and while loops. Automation at its finest!
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">for(int i=0; i&lt;1; i++) Jump();</div>
+                    <div class="code-example">while(canJump) { Jump(); break; }</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star"></div>
+                        <div class="star"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">6</div>
+                    <div class="level-title">Method Definitions</div>
+                </div>
+                <div class="level-description">
+                    Create your own methods with access modifiers. Building reusable code blocks!
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">public void Jump() { }</div>
+                    <div class="code-example">private void Move() { Jump(); }</div>
+                    <div class="code-example">void Jump() => Move();</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">7</div>
+                    <div class="level-title">Exception Handling</div>
+                </div>
+                <div class="level-description">
+                    Handle errors gracefully with try-catch blocks. Robust code is reliable code!
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">try { Jump(); } catch { }</div>
+                    <div class="code-example">if(health > 0) Jump(); else Die();</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">8</div>
+                    <div class="level-title">Classes & Objects</div>
+                </div>
+                <div class="level-description">
+                    Enter the world of Object-Oriented Programming! Create classes and instantiate objects.
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">class Player { public void Jump() { } }</div>
+                    <div class="code-example">Player p = new Player(); p.Jump();</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        class="star filled"
+                        <div class="star filled"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">9</div>
+                    <div class="level-title">Namespaces & Using</div>
+                </div>
+                <div class="level-description">
+                    Organize your code with namespaces and use external libraries. Professional coding practices!
+                </div>
+                <div class="level-examples">
+                    <h4>Valid Commands:</h4>
+                    <div class="code-example">using System; Console.WriteLine("Jump!");</div>
+                    <div class="code-example">namespace Game { public void Jump() { } }</div>
+                </div>
+                <div class="difficulty">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <div class="difficulty-stars">
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                        <div class="star filled"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add more levels here if needed -->
+    </div>
+</div>
+<script src="scripts/levelguide.js"></script>
+</body>
+</html>
